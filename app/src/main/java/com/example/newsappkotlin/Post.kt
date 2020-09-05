@@ -1,6 +1,6 @@
 package com.example.newsappkotlin
 
-class Post(
+data class Post(
     val sectionName: String,
     val date: String,
     val title: String,
