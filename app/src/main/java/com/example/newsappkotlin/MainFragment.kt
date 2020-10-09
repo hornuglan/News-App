@@ -1,10 +1,12 @@
 package com.example.newsappkotlin
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,5 +47,9 @@ class MainFragment : Fragment() {
         recycler?.addItemDecoration(itemDecoration)
     }
 
-    private fun initViewModel() {}
+    private fun initViewModel() {
+        viewModel = activity.let {
+            ViewModelProvider(this, MainViewModelFactory(Application())).get(MainViewModel::class.java)
+        }
+    }
 }
