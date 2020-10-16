@@ -23,21 +23,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, MainFragment())
             .commit()
     }
-
-    private fun getPosts() {
-        val url = "https://content.guardianapis.com/search?show-tags=contributor&api-key=${R.string.guardian_student_key}"
-
-        Fuel.get(url)
-            .responseString{_, _, result ->
-                when(result) {
-                    is Result.Failure -> {
-                        val e = result.getException()
-                        Log.d("Request error", "${e.message}")
-                    }
-                    is Result.Success -> {
-                        val posts = Gson().fromJson(result.get(), Post::class.java)
-                    }
-                }
-            }
-    }
 }

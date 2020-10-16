@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
 
@@ -35,6 +38,7 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         initRecycler()
         initViewModel()
+        viewModel?.getPosts()
     }
 
     private fun initRecycler() {
@@ -49,7 +53,24 @@ class MainFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = activity.let {
-            ViewModelProvider(this, MainViewModelFactory(Application())).get(MainViewModel::class.java)
+            ViewModelProvider(this, MainViewModelFactory(Application(), PostRepository())).get(MainViewModel::class.java)
         }
+
+        viewModel?.posts?.observe(viewLifecycleOwner, Observer {
+            adapter.posts = it
+            adapter.notifyDataSetChanged()
+        })
+
+        viewModel?.isLoading?.observe(viewLifecycleOwner, Observer {isLoading ->
+            if (isLoading) {
+                loading_progressbar.visibility = View.VISIBLE
+            } else {
+                if (viewModel?.errorMessage?.value != null) {
+                    Toast.makeText(context, viewModel?.errorMessage?.value, Toast.LENGTH_SHORT).show()
+                } else {
+                    loading_progressbar.visibility = View.GONE
+                }
+            }
+        })
     }
 }

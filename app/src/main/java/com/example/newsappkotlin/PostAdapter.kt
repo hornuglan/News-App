@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class PostAdapter(
     private val inflater: LayoutInflater,
-    private val posts: ArrayList<Post>
+    var posts: ArrayList<Post>
 ) : RecyclerView.Adapter<PostViewHolder>() {
 
     override fun getItemCount(): Int = posts.size
